@@ -6,7 +6,7 @@ export const loginUser = (email, password) => async (dispatch) => {
             type: "LoginRequest"
         })
 
-        const { data } = await axios.post("https://silk-political-target.glitch.me/login", { email, password }, {
+        const { data } = await axios.post("https://thundering-quill-shop.glitch.me/login", { email, password }, {
             headers: {
                 "Content-Type": "application/json",
 
@@ -36,7 +36,7 @@ export const logoutUser = () => async (dispatch) => {
             type: "LogoutUserRequest"
         })
 
-        await axios.post("https://silk-political-target.glitch.me/logout")
+        await axios.post("https://thundering-quill-shop.glitch.me/logout")
 
 
         dispatch({
@@ -61,7 +61,7 @@ export const registerUser = (name, email, password, company, secretQuestion, ans
             type: "RegisterRequest"
         })
 
-        const { data } = await axios.post("https://silk-political-target.glitch.me/register", { name, email, password, company, secretQuestion, answer }, {
+        const { data } = await axios.post("https://thundering-quill-shop.glitch.me/register", { name, email, password, company, secretQuestion, answer }, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -89,7 +89,7 @@ export const forgotPassword = (email, secretQuestion) => async (dispatch) => {
             type: "forgotPasswordRequest"
         })
 
-        const { data } = await axios.post("https://silk-political-target.glitch.me/forgot", { email, secretQuestion }, {
+        const { data } = await axios.post("https://thundering-quill-shop.glitch.me/forgot", { email, secretQuestion }, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -117,7 +117,7 @@ export const resetPasswordRequest = (email, secretQuestion, answer, newPassword)
         dispatch({
             type: "resetPasswordRequest"
         })
-        const { data } = await axios.post("https://silk-political-target.glitch.me/reset", { email, secretQuestion, answer, newPassword }, {
+        const { data } = await axios.post("https://thundering-quill-shop.glitch.me/reset", { email, secretQuestion, answer, newPassword }, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -143,7 +143,7 @@ export const loadUser = () => async (dispatch) => {
         })
 
 
-        const { data } = await axios.get("https://silk-political-target.glitch.me/me")
+        const { data } = await axios.get("https://thundering-quill-shop.glitch.me/me")
 
 
 
