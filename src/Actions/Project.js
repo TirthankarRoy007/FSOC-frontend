@@ -15,7 +15,7 @@ export const createProject = (name) => async (dispatch) => {
   
       const body = JSON.stringify({ name });
   
-      const res = await axios.post("https://silk-political-target.glitch.me/createProject", body, config);
+      const res = await axios.post("https://thundering-quill-shop.glitch.me/createProject", body, config);
   
       dispatch({
         type: 'createProjectSuccess',
@@ -35,7 +35,7 @@ export const getAllProjects = () => async (dispatch) => {
       type: 'getAllProjectRequest'
     });
 
-    const res = await axios.get("https://silk-political-target.glitch.me/getProject");
+    const res = await axios.get("https://thundering-quill-shop.glitch.me/getProject");
 
     dispatch({
       type: 'getAllProjectSuccess',
