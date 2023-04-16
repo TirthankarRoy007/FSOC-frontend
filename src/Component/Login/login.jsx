@@ -19,7 +19,6 @@ const Login = () => {
   };
 
   useEffect(() => {
-    console.log("error:", error);
     if (error && error !== "TOKEN IS MISSING" && error !== "Request failed with status code 401") {
       alert.error(error);
       dispatch({ type: "clearErrors" });
