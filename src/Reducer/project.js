@@ -26,7 +26,7 @@ export const projectSlice = createSlice({
 });
 
 export const fetchProject = createAsyncThunk('fetchProject', async () => {
-  const response = await fetch("https://silk-political-target.glitch.me/getProject")
+  const response = await fetch("https://thundering-quill-shop.glitch.me/getProject")
   const data = await response.json()
   return data
 })
