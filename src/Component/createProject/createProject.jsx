@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createProject } from "../../Actions/Project";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  TextField,
+  Button,
+} from "@material-ui/core";
 import "./createProject.css";
 
 const ProjectForm = () => {
@@ -10,23 +17,32 @@ const ProjectForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.trim()) {
-       dispatch(createProject(name));
+      dispatch(createProject(name));
       setName("");
-      window.location.href = "/Home";
     }
   };
 
   return (
-    <form className="form-container" onSubmit={handleSubmit}>
-      <label htmlFor="name">Project Name:</label>
-      <input
-        type="text"
-        id="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <button type="submit">Create Project</button>
-    </form>
+    <Card className="card-container" raised>
+      <CardHeader title="Create Project" />
+      <CardContent>
+        <TextField
+          label="Project Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <br />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={handleSubmit}
+        >
+          Create
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 

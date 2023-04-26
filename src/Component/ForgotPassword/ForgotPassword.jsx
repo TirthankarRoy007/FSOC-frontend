@@ -1,51 +1,52 @@
 import React, { useState } from "react";
-import { Typography, Button } from "@mui/material";
-import "./ForgotPassword.css";
+import { Typography, Button, TextField, Box } from "@mui/material";
 import { forgotPassword } from "../../Actions/User";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { Alert } from "@mui/material";
+import { useDispatch } from "react-redux";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
-  const { successMessage, errorMessage } = useSelector((state) => state.user);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await dispatch(forgotPassword(email));
+    if (!email) {
+      // If the email field is empty, display an error message
+      alert("Please enter your email");
+      return;
+    }
+    try {
+      // Dispatch the forgotPassword action
+      dispatch(forgotPassword(email));
+      // If the dispatch is successful, redirect to the reset password page
+      window.location.href = "/reset";
+    } catch (error) {
+      // If there's an error, display an error message
+      alert("Invalid email. Please try again.");
+    }
   };
 
   return (
-    <div className="forgotPassword">
-      {successMessage && (
-        <Alert severity="success" onClose={() => {}}>
-          {successMessage}
-        </Alert>
-      )}
-      {errorMessage && (
-        <Alert severity="error" onClose={() => {}}>
-          {errorMessage}
-        </Alert>
-      )}
-      <form className="forgotPasswordForm" onSubmit={submitHandler}>
-        <Typography variant="h3" style={{ padding: "2vmax" }}>
+    <Box sx={{ display: "flex", justifyContent: "center", mt: 8 }}>
+      <form onSubmit={submitHandler}>
+        <Typography variant="h5" mb={2}>
           Forgot Password
         </Typography>
-
-        <input
-          className="forgotPasswordInputs"
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Link to="/reset">
-          <Button type="submit">Reset Password</Button>
-        </Link>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <TextField
+            type="email"
+            label="Email"
+            variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            sx={{ mb: 2 }}
+          />
+          <Button variant="contained" type="submit">
+            Reset Password
+          </Button>
+        </Box>
       </form>
-    </div>
+    </Box>
   );
 };
 

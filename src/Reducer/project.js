@@ -6,6 +6,7 @@ export const projectSlice = createSlice({
     loading: false,
     error: null,
     projects: [],
+    isAuthenticated: false,
   },
   reducers: {
     createProjectRequest: (state) => {
@@ -15,18 +16,70 @@ export const projectSlice = createSlice({
     createProjectSuccess: (state, action) => {
       state.loading = false;
       state.projects.push(action.payload);
-      state.isAuthenticated = true
+      state.isAuthenticated = true;
     },
     createProjectFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
-      state.isAuthenticated = false
+      state.isAuthenticated = false;
     },
+    updateProjectRequest: (state) => {
+      state.loading = true;
+    },
+    updateProjectSuccess: (state, action) => {
+      state.loading = false;
+      state.message = action.payload 
+      },
+    updateProjectFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    deleteProjectRequest: (state)=>{
+      state.loading = true;
+    },
+    deleteProjectSuccess: (state, action) => {
+      state.loading = false;
+      state.message = "Project Deleted Successfully";
+    },
+    deleteProjectFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload
+    },
+    addMemberToProjectRequest: (state, action) => {
+      state.loading = true;
+      state.error = null;
+      state.message = null;
+    },
+    addMemberToProjectSuccess: (state, action) => {
+      state.loading = false;
+      state.message = "Member added to Project Successfully";
+      state.projects = action.payload
+    },
+    addMemberToProjectFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.message = null;
+    },
+    removeMemberFromProjectRequest: (state, action) => {
+      state.loading = true;
+      state.error = null;
+      state.message = null;
+    },
+    removeMemberFromProjectSuccess: (state, action) => {
+      state.loading = false;
+      state.message = "Member removed from Project Successfully";
+      state.projects = action.payload;
+    },
+    removeMemberFromProjectFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.message = null;
+    },    
   },
 });
 
 export const fetchProject = createAsyncThunk('fetchProject', async () => {
-  const response = await fetch("https://thundering-quill-shop.glitch.me/getProject")
+  const response = await fetch("http://localhost:4000/getProject")
   const data = await response.json()
   return data
 })
@@ -35,8 +88,8 @@ export const projectReducer = createSlice({
   name: "projects",
   initialState: {
     isLoading: false,
-    data: null,
-    isError: false
+    data: [],
+    isError: null
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProject.pending, (state) => {

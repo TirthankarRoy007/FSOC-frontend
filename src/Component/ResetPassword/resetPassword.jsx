@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./resetPassword.css";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, TextField, Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { forgotPassword } from "../../Actions/User";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { useAlert } from "react-alert";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -13,31 +11,10 @@ const ResetPassword = () => {
   const [answer, setAnswer] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const dispatch = useDispatch();
-  const alert = useAlert();
 
-  const { error, message, secretQuestion, userEmail } = useSelector(
+  const { secretQuestion, userEmail } = useSelector(
     (state) => state.user
   );
-
-  useEffect(() => {
-    axios
-      .post("/forgot")
-      .then((res) => {
-        setEmail(res.data.email);
-      })
-      .catch((error) => console.error(error));
-  }, []);
-
-  useEffect(() => {
-    if (error) {
-      alert.error(error);
-      dispatch({ type: "clearErrors" });
-    }
-    if (message) {
-      alert.success(message);
-      dispatch({ type: "clearMessage" });
-    }
-  }, [alert, error, message, dispatch]);
 
   useEffect(() => {
     setEmail(userEmail);
@@ -49,52 +26,93 @@ const ResetPassword = () => {
     dispatch(forgotPassword(email, question, answer, newPassword));
   };
 
+  const resetPasswordHandler = async () => {
+    try {
+      const response = await fetch(`http://localhost:4000/forgot`);
+      const data = await response.json();
+      if (response.ok) {
+        setQuestion(data.secretQuestion);
+        setEmail(data.email);
+      } else {
+        // display an error message if there's an issue fetching the data
+        alert("Failed to fetch user data");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <div className="resetPassword">
-      <form className="resetPasswordForm" onSubmit={submitHandler}>
-        <Typography variant="h3" style={{ padding: "2vmax" }}>
-          Reset Password
-        </Typography>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+    >
+      <Box maxWidth={400} mx={3}>
+        <form onSubmit={submitHandler}>
+          <Typography variant="h4" gutterBottom>
+            Reset Password
+          </Typography>
 
-        <input
-          type="email"
-          value={email}
-          className="resetPasswordInputs"
-          required
-          onChange={(e) => setEmail(e.target.value)}
-        />
+          <TextField
+            type="email"
+            label="Email"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <input
-          type="text"
-          value={question}
-          className="resetPasswordInputs"
-          required
-          onChange={(e) => setQuestion(e.target.value)}
-        />
+          <TextField
+            type="text"
+            label="Security Question"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            value={question}
+            required
+            onChange={(e) => setQuestion(e.target.value)}
+          />
 
-        <input
-          type="text"
-          value={answer}
-          className="resetPasswordInputs"
-          placeholder="Enter Answer"
-          required
-          onChange={(e) => setAnswer(e.target.value)}
-        />
+          <TextField
+            type="text"
+            label="Security Answer"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            value={answer}
+            required
+            onChange={(e) => setAnswer(e.target.value)}
+          />
 
-        <input
-          type="password"
-          className="resetPasswordInputs"
-          placeholder="Enter New Password"
-          value={newPassword}
-          required
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-        <Button type="submit">Reset</Button>
-        <Link to="/login">
-          <Typography>Go to Login</Typography>
-        </Link>
-      </form>
-    </div>
+          <TextField
+            type="password"
+            label="New Password"
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            value={newPassword}
+            required
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <Box mt={2} textAlign="center">
+            <Link to="/login">
+              <Typography variant="body1">
+                Go to Login
+              </Typography>
+            </Link>
+          </Box>
+        </form>
+        <Box mt={2} textAlign="center">
+          <Button variant="contained" onClick={resetPasswordHandler}>
+            Reset Password
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

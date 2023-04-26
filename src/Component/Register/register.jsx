@@ -41,7 +41,7 @@ const Register = () => {
 
   return (
     <div className="register">
-      {error && !error.includes("TOKEN IS MISSING") && (
+      {(
         <Alert severity="error" onClose={() => dispatch({ type: "clearErrors" })}>
           {error}
         </Alert>

@@ -1,4 +1,5 @@
-import axios from "axios"
+import Cookies from "js-cookie"
+import { api } from "../api/api"
 
 export const loginUser = (email, password) => async (dispatch) => {
     try {
@@ -6,21 +7,23 @@ export const loginUser = (email, password) => async (dispatch) => {
             type: "LoginRequest"
         })
 
-        const { data } = await axios.post("https://thundering-quill-shop.glitch.me/login", { email, password }, {
+        const { data } = await api.post("/login", { email, password }, {
             headers: {
                 "Content-Type": "application/json",
 
             },
         })
+        localStorage.setItem("auth-token", data.data);
+        Cookies.set("authorization", data.data, { expires: 86400 });
 
         dispatch({
             type: "LoginSuccess",
-            payload: data.user
+            payload: data.data
         })
 
 
     } catch (error) {
-        if (error.response.data.message !== "TOKEN IS MISSING") {
+        {
             dispatch({
                 type: "LoginFailure",
                 payload: error.response.data.message
@@ -36,7 +39,7 @@ export const logoutUser = () => async (dispatch) => {
             type: "LogoutUserRequest"
         })
 
-        await axios.post("https://thundering-quill-shop.glitch.me/logout")
+        await api.post("/logout")
 
 
         dispatch({
@@ -61,7 +64,7 @@ export const registerUser = (name, email, password, company, secretQuestion, ans
             type: "RegisterRequest"
         })
 
-        const { data } = await axios.post("https://thundering-quill-shop.glitch.me/register", { name, email, password, company, secretQuestion, answer }, {
+        const { data } = await api.post("/register", { name, email, password, company, secretQuestion, answer }, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -89,7 +92,7 @@ export const forgotPassword = (email, secretQuestion) => async (dispatch) => {
             type: "forgotPasswordRequest"
         })
 
-        const { data } = await axios.post("https://thundering-quill-shop.glitch.me/forgot", { email, secretQuestion }, {
+        const { data } = await api.post("/forgot", { email, secretQuestion }, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -117,7 +120,7 @@ export const resetPasswordRequest = (email, secretQuestion, answer, newPassword)
         dispatch({
             type: "resetPasswordRequest"
         })
-        const { data } = await axios.post("https://thundering-quill-shop.glitch.me/reset", { email, secretQuestion, answer, newPassword }, {
+        const { data } = await api.post("/reset", { email, secretQuestion, answer, newPassword }, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -143,7 +146,7 @@ export const loadUser = () => async (dispatch) => {
         })
 
 
-        const { data } = await axios.get("https://thundering-quill-shop.glitch.me/me")
+        const { data } = await api.get("/me")
 
 
 

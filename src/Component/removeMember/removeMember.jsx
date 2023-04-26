@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addMember } from '../../Actions/Project';
+import { removeMember } from '../../Actions/Project';
 import { Card, CardContent, TextField, Button } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 
-const AddMemberForm = () => {
+const RemoveMemberForm = () => {
   const { projectId } = useParams();
   const dispatch = useDispatch();
   const [memberId, setMemberId] = useState('');
@@ -12,7 +12,7 @@ const AddMemberForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (memberId.trim()) {
-      dispatch(addMember(projectId, memberId));
+      dispatch(removeMember(projectId, memberId));
       setMemberId('');
       window.location.href = "/getProject"
     }
@@ -23,13 +23,13 @@ const AddMemberForm = () => {
       <CardContent>
         <form onSubmit={handleSubmit}>
           <TextField
-            label="Member Data"
+            label="Member ID"
             fullWidth
             value={memberId}
             onChange={(e) => setMemberId(e.target.value)}
           />
           <Button variant="contained" color="primary" type="submit" style={{ marginTop: '1rem' }}>
-            Add Member
+            Remove Member
           </Button>
         </form>
       </CardContent>
@@ -37,4 +37,4 @@ const AddMemberForm = () => {
   );
 };
 
-export default AddMemberForm;
+export default RemoveMemberForm;
